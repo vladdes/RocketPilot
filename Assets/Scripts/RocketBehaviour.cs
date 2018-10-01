@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Globals;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,5 +57,18 @@ public class RocketBehaviour : MonoBehaviour {
         rigidbody.freezeRotation = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+        switch (collision.gameObject.tag)
+        {
+            case Constants.friendly:
+                print("friendly");
+                break;
+            default:
+                print("dead");
+                break;
+        }
+    }
 
 }
