@@ -1,8 +1,6 @@
 ﻿using Assets.Scripts.Globals;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RocketBehaviour : MonoBehaviour {
     
@@ -59,14 +57,18 @@ public class RocketBehaviour : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        string scene = SceneManager.GetActiveScene().name;
+        var newScene = EnumHandler.ConverToEnum<Scenes>(scene) + 1;
         switch (collision.gameObject.tag)
         {
             case Constants.friendly:
                 print("friendly");
                 break;
+            case Constants.landingPad:
+                SceneManager.LoadScene(EnumHandler.ConvertToString(newScene));
+                break;
             default:
-                print("dead");
+                SceneManager.LoadScene(EnumHandler.ConvertToString(Scenes.Scene1));
                 break;
         }
     }

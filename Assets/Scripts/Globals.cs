@@ -24,5 +24,13 @@ namespace Assets.Scripts.Globals
         public const string friendly = "Friendly";
         public const string player = "Player";
         public const string evilBlock = "EvilBlock";
+        public const string landingPad = "LandingPad";
+    }
+
+    public enum Scenes
+    {
+        Scene1,
+        Scene2,
+        Scene3
     }
 }
