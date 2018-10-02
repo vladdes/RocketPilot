@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 
 namespace Assets.Scripts.Globals
 {
@@ -33,4 +31,13 @@ namespace Assets.Scripts.Globals
         Scene2,
         Scene3
     }
+
+    public enum State
+    {
+        Alive,
+        Dying,
+        Transcending
+    }
+
+    
 }
