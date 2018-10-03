@@ -8,35 +8,34 @@ public class RocketBehaviour : MonoBehaviour
 {
 
     Rigidbody rigidbody;
-    AudioSource boosterSrc;
+    AudioSource audioSource;
     [SerializeField] float rotationFactor;
     [SerializeField] float thrustFactor;
+    [SerializeField] AudioClip mainEngine;
+    [SerializeField] AudioClip winning;
+    [SerializeField] AudioClip dying;
+    [SerializeField] ParticleSystem particleDying;
+    [SerializeField] ParticleSystem particleWinning;
     State state;
 
 
-    // Use this for initialization
+   
     void Start()
     {
         state = State.Alive;
         rigidbody = this.GetComponent<Rigidbody>();
-        boosterSrc = this.gameObject.GetComponent<AudioSource>();
+        audioSource = this.gameObject.GetComponent<AudioSource>();
+        
 
     }
 
-    // Update is called once per frame
+  
     void Update()
     {
         if (state == State.Alive)
         {
             Thrust();
             Rotate();
-        }
-        else
-        {
-            if (boosterSrc.isPlaying)
-            {
-                boosterSrc.Stop();
-            }
         }
 
     }
@@ -45,18 +44,23 @@ public class RocketBehaviour : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            rigidbody.AddRelativeForce(Vector3.up * thrustFactor);
-            if (!boosterSrc.isPlaying)
-            {
-                boosterSrc.Play();
-            }
+            Applythrust();
 
         }
         else
         {
-            boosterSrc.Stop();
+            audioSource.Stop();
         }
 
+    }
+
+    private void Applythrust()
+    {
+        rigidbody.AddRelativeForce(Vector3.up * thrustFactor);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
     }
 
     private void Rotate()
@@ -87,14 +91,30 @@ public class RocketBehaviour : MonoBehaviour
                 print("friendly");
                 break;
             case Constants.landingPad:
-                state = State.Transcending;
-                Invoke("LoadNextScene", 1);
+                Won();
                 break;
             default:
-                state = State.Dying;
-                Invoke("Dead", 1);
+                Dying();
                 break;
         }
+    }
+
+    private void Dying()
+    {
+        particleDying.Play();
+        audioSource.Stop();
+        audioSource.PlayOneShot(dying);
+        state = State.Dying;
+        Invoke("Dead", 1);
+    }
+
+    private void Won()
+    {
+        particleWinning.Play();
+        state = State.Transcending;
+        audioSource.Stop();
+        audioSource.PlayOneShot(winning);
+        Invoke("LoadNextScene", 1);
     }
 
     private void Dead()
